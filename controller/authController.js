@@ -8,7 +8,7 @@ export const registeration = async (req, res) => {
     const { name, email, password } = req.body;
     const existUser = await User.findOne({ email });
     if (existUser) {
-      return res.status(2400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User already exists' });
     }
     if (!validator.isEmail(email)) {
       return res.status(400).json({ message: 'Invalid email format' });
