@@ -5,7 +5,9 @@ import { IoEyeOutline, IoEye } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
-import { authDataContext } from '../context/authContext.jsx';// adjust path if needed
+import { authDataContext } from '../context/authContext.jsx';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '/utils/Firebase.js';
 
 
 function Login() {
@@ -31,7 +33,28 @@ function Login() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
+  const googleLogin = async () => {
+    try {
+      const response = await signInWithPopup(auth, provider);
+     let user = response.user;
+     let name = user.displayName;
+     let email = user.email;
+
+     const result = await axios.post(
+       'http://localhost:8000/api/auth/googleLogin',
+       {
+         name,
+         email,
+       },
+       { withCredentials: true }
+     );
+     console.log(result.data);
+     
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-white flex flex-col items-center justify-start">
@@ -44,9 +67,9 @@ function Login() {
       </div>
 
       <div className="w-full h-[100px] flex items-center justify-center flex-col gap-[10px]">
-        <span className="text-[25px] font-semibold">Registration Page</span>
+        <span className="text-[25px] font-semibold">Login Page</span>
         <span className="text-[16px]">
-          Welcome to AfriKart — please create an account to continue
+          Welcome to AfriKart — please login your account to continue
         </span>
       </div>
 
@@ -57,9 +80,9 @@ function Login() {
           className="w-[90%] h-[90%] flex flex-col items-center justify-start gap-[20px]"
         >
           {/* Google Sign Up */}
-          <div className="w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer">
+          <div className="w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer" onClick={googleLogin}>
             <img className="w-[20px]" src={Google} alt="Google logo" />
-            <span className="text-[16px]">Registration with Google</span>
+            <span className="text-[16px]">Sign In with Google</span>
           </div>
 
           {/* Divider */}
