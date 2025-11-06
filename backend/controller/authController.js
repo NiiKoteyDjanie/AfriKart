@@ -5,7 +5,9 @@ import { genToken } from '../config/token.js';
 
 export const registeration = async (req, res) => {
   try {
+ 
     const { name, email, password } = req.body;
+
     const existUser = await User.findOne({ email });
     if (existUser) {
       return res.status(400).json({ message: 'User already exists' });
@@ -53,7 +55,7 @@ export const login = async (req, res) => {
       sameSite: 'None',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(201).json({ message: 'Login successful' });
+    return res.status(201).json(user);
   } catch (error) {
     console.log('login error', error);
     return res.status(500).json({ message: `Login error ${error}` });
