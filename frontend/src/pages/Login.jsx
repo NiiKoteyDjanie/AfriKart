@@ -5,10 +5,11 @@ import { IoEyeOutline, IoEye } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
-import AuthContext from '../context/authContext';// adjust path if needed
+import { authDataContext } from '../context/authContext.jsx';// adjust path if needed
 
 
 function Login() {
+
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
