@@ -4,9 +4,12 @@ import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Registration from './pages/Registration.jsx'
 import Nav from './components/Nav.jsx'
-import "./index.css"; //
+import { useContext } from 'react'
+import { userDataContext } from './context/UserContext.jsx'
+
 
 function App() {
+  let {userData} = useContext(userDataContext);
   return (
     <>
     <Nav />
