@@ -5,17 +5,17 @@ import { IoEyeOutline, IoEye } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
-import { authDataContext } from '../context/authContext.jsx';
+import { authDataContext } from '../context/AuthContext.jsx';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '/utils/Firebase.js';
-
+import { userDataContext } from '../context/UserContext.jsx';
 
 function Login() {
-
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   let { serverUrl } = useContext(authDataContext);
+  let { getCurrentUser } = useContext(userDataContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -29,32 +29,34 @@ function Login() {
         },
         { withCredentials: true }
       );
+
+      getCurrentUser();
+      navigate('/');
       console.log(result.data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   const googleLogin = async () => {
     try {
       const response = await signInWithPopup(auth, provider);
-     let user = response.user;
-     let name = user.displayName;
-     let email = user.email;
+      let user = response.user;
+      let name = user.displayName;
+      let email = user.email;
 
-     const result = await axios.post(
-       'http://localhost:8000/api/auth/googleLogin',
-       {
-         name,
-         email,
-       },
-       { withCredentials: true }
-     );
-     console.log(result.data);
-     
+      const result = await axios.post(
+        'http://localhost:8000/api/auth/googleLogin',
+        {
+          name,
+          email,
+        },
+        { withCredentials: true }
+      );
+      console.log(result.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-white flex flex-col items-center justify-start">
@@ -75,12 +77,15 @@ function Login() {
 
       <div className="max-w-[600px] w-[90%] h-[500px] bg-[#00000025] border border-[#96969635] backdrop-blur-2xl rounded-lg shadow-lg flex items-center justify-center">
         <form
-        onSubmit={handleLogin}
+          onSubmit={handleLogin}
           autoComplete="off"
           className="w-[90%] h-[90%] flex flex-col items-center justify-start gap-[20px]"
         >
           {/* Google Sign Up */}
-          <div className="w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer" onClick={googleLogin}>
+          <div
+            className="w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer"
+            onClick={googleLogin}
+          >
             <img className="w-[20px]" src={Google} alt="Google logo" />
             <span className="text-[16px]">Sign In with Google</span>
           </div>
