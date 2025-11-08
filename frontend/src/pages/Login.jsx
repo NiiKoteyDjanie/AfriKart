@@ -29,10 +29,10 @@ function Login() {
         },
         { withCredentials: true }
       );
-
+console.log(result.data);
       getCurrentUser();
       navigate('/');
-      console.log(result.data);
+      
     } catch (error) {
       console.log(error);
     }

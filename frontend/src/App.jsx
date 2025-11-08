@@ -12,7 +12,7 @@ function App() {
   let {userData} = useContext(userDataContext);
   return (
     <>
-    <Nav />
+     {userData && <Nav />}
       <Routes>
         <Route path="/signup" element={<Registration />} />
         <Route path="/login" element={<Login />} />
